@@ -1,0 +1,140 @@
+mysql> create database college;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use college;
+Database changed
+mysql> create table student(roll int , name varchar(20) , class varchar(5) , age int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into student values
+    -> (1 , 'shreya' , 'A' , 15) 
+    -> ,
+    -> (2 , 'jitu' , 'B' , 22),
+    -> (3 , 'aditi' , 'C' , 24),
+    -> (4 , 'anshika' , 'D' , 50),
+    -> (5 , 'arun' , 'E' , 12);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> delete from student where roll = 4;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++------+--------+-------+------+
+| roll | name   | class | age  |
++------+--------+-------+------+
+|    1 | shreya | A     |   15 |
+|    2 | jitu   | B     |   22 |
+|    3 | aditi  | C     |   24 |
+|    5 | arun   | E     |   12 |
++------+--------+-------+------+
+4 rows in set (0.00 sec)
+
+mysql> alter table student add column marks float;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++------+--------+-------+------+-------+
+| roll | name   | class | age  | marks |
++------+--------+-------+------+-------+
+|    1 | shreya | A     |   15 |  NULL |
+|    2 | jitu   | B     |   22 |  NULL |
+|    3 | aditi  | C     |   24 |  NULL |
+|    5 | arun   | E     |   12 |  NULL |
++------+--------+-------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> update student set marks = 50 where roll = 3;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++------+--------+-------+------+-------+
+| roll | name   | class | age  | marks |
++------+--------+-------+------+-------+
+|    1 | shreya | A     |   15 |  NULL |
+|    2 | jitu   | B     |   22 |  NULL |
+|    3 | aditi  | C     |   24 |    50 |
+|    5 | arun   | E     |   12 |  NULL |
++------+--------+-------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> update student set marks = 80 where roll = 1 and roll = 2 and roll = 5;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> select * from student;
++------+--------+-------+------+-------+
+| roll | name   | class | age  | marks |
++------+--------+-------+------+-------+
+|    1 | shreya | A     |   15 |  NULL |
+|    2 | jitu   | B     |   22 |  NULL |
+|    3 | aditi  | C     |   24 |    50 |
+|    5 | arun   | E     |   12 |  NULL |
++------+--------+-------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> update student set marks = 80 where roll between 1 and 5;
+Query OK, 4 rows affected (0.01 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select * from student;
++------+--------+-------+------+-------+
+| roll | name   | class | age  | marks |
++------+--------+-------+------+-------+
+|    1 | shreya | A     |   15 |    80 |
+|    2 | jitu   | B     |   22 |    80 |
+|    3 | aditi  | C     |   24 |    80 |
+|    5 | arun   | E     |   12 |    80 |
++------+--------+-------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> update student set marks = 75.6 where roll = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student;
++------+--------+-------+------+-------+
+| roll | name   | class | age  | marks |
++------+--------+-------+------+-------+
+|    1 | shreya | A     |   15 |    80 |
+|    2 | jitu   | B     |   22 |    80 |
+|    3 | aditi  | C     |   24 |  75.6 |
+|    5 | arun   | E     |   12 |    80 |
++------+--------+-------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> update student set marks = marks + 0.5;
+Query OK, 4 rows affected (0.00 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select * from student;
++------+--------+-------+------+-------+
+| roll | name   | class | age  | marks |
++------+--------+-------+------+-------+
+|    1 | shreya | A     |   15 |  80.5 |
+|    2 | jitu   | B     |   22 |  80.5 |
+|    3 | aditi  | C     |   24 |  76.1 |
+|    5 | arun   | E     |   12 |  80.5 |
++------+--------+-------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> truncate student;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from student;
+Empty set (0.00 sec)
+
+mysql> desc student;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| roll  | int         | YES  |     | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
+| class | varchar(5)  | YES  |     | NULL    |       |
+| age   | int         | YES  |     | NULL    |       |
+| marks | float       | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
