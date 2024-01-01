@@ -1,0 +1,335 @@
+========================================================================== Q1) and Q2) SQL ======================================================================================
+
+mysql> select * from dept
+    -> ;
++--------+------------+---------+
+| deptno | dname      | loc     |
++--------+------------+---------+
+|     10 | ACCOUNTING | NEWYORK |
+|     20 | RESEARCH   | DALLAS  |
+|     30 | SALES      | CHICAGO |
+|     40 | OPERATIONS | BOSTON  |
++--------+------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from emp
+    -> ;\
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | ward   | salesman  | 7698 | 1984-02-22 | 1250 |  500 |     30 |
+|  7566 | jones  | manager   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | martin | salesman  | 7698 | 1982-09-28 | 1250 | 1400 |     30 |
+|  7698 | blake  | manager   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | clark  | manager   | 7839 | 1981-06-09 | 2450 | NULL |     10 |
+|  7788 | scott  | analyst   | 7566 | 1887-07-13 | 3000 | NULL |     20 |
+|  7839 | king   | president | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7844 | turner | salesman  | 7698 | 1981-09-08 | 1500 |    0 |     30 |
+|  7876 | adams  | clerk     | 7788 | 1983-07-17 | 1100 | NULL |     20 |
+|  7900 | james  | clerk     | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | ford   | analyst   | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7934 | miller | clerk     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+14 rows in set (0.00 sec)
+
+
+---------------------------------------------------------------------------------------------------
+Q1.1)
+mysql> select e.empno as 'emp id', e.ename as 'emp name', d.loc as 'department location', d.dname as 'department name' from emp e join dept d on e.deptno = d.deptno where sal>(select sal from emp where ename="jones") || sal>(select sal from emp where ename="scott");
++--------+----------+---------------------+-----------------+
+| emp id | emp name | department location | department name |
++--------+----------+---------------------+-----------------+
+|   7788 | scott    | DALLAS              | RESEARCH        |
+|   7839 | king     | NEWYORK             | ACCOUNTING      |
+|   7902 | ford     | DALLAS              | RESEARCH        |
++--------+----------+---------------------+-----------------+
+3 rows in set, 1 warning (0.00 sec)
+
+
+---------------------------------------------------------------------------------------------------
+Q1.2)
+mysql> select e.empno as 'emp id', e.ename as 'emp name', d.dname as 'department name', e.sal as 'salary', d.deptno as 'department id' from emp e join dept d on e.deptno = d.deptno where d.dname="RESEARCH";
++--------+----------+-----------------+--------+---------------+
+| emp id | emp name | department name | salary | department id |
++--------+----------+-----------------+--------+---------------+
+|   7369 | smith    | RESEARCH        |    800 |            20 |
+|   7566 | jones    | RESEARCH        |   2975 |            20 |
+|   7788 | scott    | RESEARCH        |   3000 |            20 |
+|   7876 | adams    | RESEARCH        |   1100 |            20 |
+|   7902 | ford     | RESEARCH        |   3000 |            20 |
++--------+----------+-----------------+--------+---------------+
+5 rows in set (0.00 sec)
+
+
+---------------------------------------------------------------------------------------------------
+Q1.3)
+mysql> select e.* from emp e join dept d on e.deptno = d.deptno where d.dname="ACCOUNTING";
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7782 | clark  | manager   | 7839 | 1981-06-09 | 2450 | NULL |     10 |
+|  7839 | king   | president | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7934 | miller | clerk     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+3 rows in set (0.00 sec)
+
+
+---------------------------------------------------------------------------------------------------
+Q1.4)
+mysql> SELECT UPPER(emp_name) AS EMP_NAME_UPPER, LOWER(department_name) AS DEPARTMENT_NAME_LOWER, LEN(emp_name) AS EMP_NAME_LENGTH
+    -> \c
+mysql> SELECT UPPER(e.ename) AS EMP_NAME, LOWER(d.dname) AS DEPARTMENT_NAME, LEN(e.ename) AS length_EMP FROM emp e join dept d ON e.empno = d.deptno;
+ERROR 1305 (42000): FUNCTION lab_exam.LEN does not exist
+mysql> SELECT UPPER(e.ename) AS EMP_NAME, LOWER(d.dname) AS DEPARTMENT_NAME, LENGTH(e.ename) AS length_EMP FROM emp e join dept d ON e.empno = d.deptno;
+Empty set (0.00 sec)
+
+mysql> select upper(e.ename), lower(d.dname), length(e.ename) from emp e join dept d on e.deptno = d.deptno;
++----------------+----------------+-----------------+
+| upper(e.ename) | lower(d.dname) | length(e.ename) |
++----------------+----------------+-----------------+
+| CLARK          | accounting     |               5 |
+| KING           | accounting     |               4 |
+| MILLER         | accounting     |               6 |
+| SMITH          | research       |               5 |
+| JONES          | research       |               5 |
+| SCOTT          | research       |               5 |
+| ADAMS          | research       |               5 |
+| FORD           | research       |               4 |
+| ALLEN          | sales          |               5 |
+| WARD           | sales          |               4 |
+| MARTIN         | sales          |               6 |
+| BLAKE          | sales          |               5 |
+| TURNER         | sales          |               6 |
+| JAMES          | sales          |               5 |
++----------------+----------------+-----------------+
+14 rows in set (0.00 sec)
+
+
+
+---------------------------------------------------------------------------------------------------
+Q1.5)
+mysql> select e.ename, e.job as boss, e.mgr, e.hiredate, e.sal, e.comm, e.deptno from emp e join dept d on e.deptno = d.deptno where job = "manager";
++-------+---------+------+------------+------+------+--------+
+| ename | boss    | mgr  | hiredate   | sal  | comm | deptno |
++-------+---------+------+------------+------+------+--------+
+| jones | manager | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+| blake | manager | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+| clark | manager | 7839 | 1981-06-09 | 2450 | NULL |     10 |
++-------+---------+------+------------+------+------+--------+
+3 rows in set (0.00 sec)
+
+
+
+---------------------------------------------------------------------------------------------------
+Q2.1)
+mysql> select e.ename , d.loc, d.dname from emp e join dept d on e.deptno = d.deptno;
++--------+---------+------------+
+| ename  | loc     | dname      |
++--------+---------+------------+
+| clark  | NEWYORK | ACCOUNTING |
+| king   | NEWYORK | ACCOUNTING |
+| miller | NEWYORK | ACCOUNTING |
+| smith  | DALLAS  | RESEARCH   |
+| jones  | DALLAS  | RESEARCH   |
+| scott  | DALLAS  | RESEARCH   |
+| adams  | DALLAS  | RESEARCH   |
+| ford   | DALLAS  | RESEARCH   |
+| allen  | CHICAGO | SALES      |
+| ward   | CHICAGO | SALES      |
+| martin | CHICAGO | SALES      |
+| blake  | CHICAGO | SALES      |
+| turner | CHICAGO | SALES      |
+| james  | CHICAGO | SALES      |
++--------+---------+------------+
+14 rows in set (0.00 sec)
+
+
+
+---------------------------------------------------------------------------------------------------
+Q2.2)
+mysql> select distinct(job), sum(sal) from emp group by job;
++-----------+----------+
+| job       | sum(sal) |
++-----------+----------+
+| clerk     |     4150 |
+| salesman  |     5600 |
+| manager   |     8275 |
+| analyst   |     6000 |
+| president |     5000 |
++-----------+----------+
+5 rows in set (0.00 sec)
+
+
+
+---------------------------------------------------------------------------------------------------
+Q2.3)
+mysql> SELECT d.deptno, d.dname FROM dept d JOIN emp e ON d.deptno = e.deptno GROUP BY d.deptno, d.dname HAVING COUNT(e.empno) > 3;
++--------+----------+
+| deptno | dname    |
++--------+----------+
+|     20 | RESEARCH |
+|     30 | SALES    |
++--------+----------+
+2 rows in set (0.00 sec)
+
+
+
+---------------------------------------------------------------------------------------------------
+Q2.4
+mysql> select * from emp where empno NOT IN (select empno from emp where empno IN (SELECT mgr from emp));
++-------+--------+----------+------+------------+------+------+--------+
+| empno | ename  | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+----------+------+------------+------+------+--------+
+|  7369 | smith  | clerk    | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7499 | allen  | salesman | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | ward   | salesman | 7698 | 1984-02-22 | 1250 |  500 |     30 |
+|  7654 | martin | salesman | 7698 | 1982-09-28 | 1250 | 1400 |     30 |
+|  7844 | turner | salesman | 7698 | 1981-09-08 | 1500 |    0 |     30 |
+|  7876 | adams  | clerk    | 7788 | 1983-07-17 | 1100 | NULL |     20 |
+|  7900 | james  | clerk    | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7934 | miller | clerk    | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+----------+------+------------+------+------+--------+
+8 rows in set (0.00 sec)
+
+
+========================================================================== Q3) FUNCTION ======================================================================================
+
+!!!!!!!!!!! (since last name is not present in the emp table, Im using job as the alternative) !!!!!!!!!!!!!!!!!!
+
+mysql> DELIMITER &&
+mysql> CREATE FUNCTION get_employee_name(emp_number INT) RETURNS VARCHAR(255) DETERMINISTIC
+    -> BEGIN
+    ->   DECLARE full_name VARCHAR(255);
+    ->   SELECT CONCAT(ename, ' ', job) INTO full_name
+    ->   FROM emp
+    ->   WHERE empno = emp_number;
+    ->   RETURN full_name;
+    -> END;
+    ->
+    -> &&
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select get_employee_name(7788) as emp_job;
++---------------+
+| emp_job       |
++---------------+
+| scott analyst |
++---------------+
+1 row in set (0.00 sec)
+
+========================================================================== Q4) TRIGGER ======================================================================================
+
+DELIMITER &&
+
+CREATE TRIGGER sal_trigger
+AFTER INSERT ON emp
+FOR EACH ROW
+WHEN (new.sal <> old.sal)
+DECLARE
+  sal_diff NUMBER;
+BEGIN
+  IF UPDATING('sal') THEN
+    sal_diff := :new.sal - :old.sal;
+    DBMS_OUTPUT.PUT_LINE('Salary difference: ' || sal_diff);
+  END IF;
+END;
+
+&&
+
+DELIMITER ;
+
+
+
+========================================================================== Q5) MONGODB ======================================================================================
+
+lab_exam> db.mycol.find()
+[
+  {
+    _id: ObjectId('659241025fb2cc44301a73fd'),
+    title: 'Mongodb overview',
+    description: 'Mongodb is no sql database',
+    by: 'tutorial poinyt',
+    url: 'http://www.abc.com',
+    tags: [ 'mongodb', 'database', 'nosql' ],
+    likes: 100
+  },
+  {
+    _id: ObjectId('659241025fb2cc44301a73fe'),
+    title: 'Nosql db',
+    description: 'nodwk does not have table',
+    by: 'tutorial point',
+    url: 'http://www.abc.com',
+    tags: [ 'mongodb', 'database', 'nosql' ],
+    likes: 20,
+    comments: [
+      {
+        user: 'user1',
+        message: 'my first c',
+        dateCreated: ISODate('2013-12-09T21:05:00.000Z'),
+        like: 0
+      }
+    ]
+  }
+]
+
+
+---------------------------------------------------------------------------------------------------
+Q1)
+lab_exam> db.mycol.updateOne({'comments.user':'user1'},{$set:{url:'www.google.com'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+lab_exam> db.mycol.find()
+[
+  {
+    _id: ObjectId('659241025fb2cc44301a73fd'),
+    title: 'Mongodb overview',
+    description: 'Mongodb is no sql database',
+    by: 'tutorial poinyt',
+    url: 'http://www.abc.com',
+    tags: [ 'mongodb', 'database', 'nosql' ],
+    likes: 100
+  },
+  {
+    _id: ObjectId('659241025fb2cc44301a73fe'),
+    title: 'Nosql db',
+    description: 'nodwk does not have table',
+    by: 'tutorial point',
+    url: 'www.google.com',
+    tags: [ 'mongodb', 'database', 'nosql' ],
+    likes: 20,
+    comments: [
+      {
+        user: 'user1',
+        message: 'my first c',
+        dateCreated: ISODate('2013-12-09T21:05:00.000Z'),
+        like: 0
+      }
+    ]
+  }
+]
+
+---------------------------------------------------------------------------------------------------
+Q2)
+lab_exam> db.mycol.find({likes:{$gt:20}})
+[
+  {
+    _id: ObjectId('659241025fb2cc44301a73fd'),
+    title: 'Mongodb overview',
+    description: 'Mongodb is no sql database',
+    by: 'tutorial poinyt',
+    url: 'http://www.abc.com',
+    tags: [ 'mongodb', 'database', 'nosql' ],
+    likes: 100
+  }
+]
+lab_exam>
+
